@@ -1,0 +1,16 @@
+if -f [ ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+export PS1='$(u=$(whoami);
+       printf "\[\e[43m\e[30m\]%s[\e[47m\e[30m\]@laptop:\[\e[0m\]" "${u:0:4}..${u: -4}";
+       git_root=$(git rev-parse --show-toplevel 2>/dev/null);
+       if [ ! -z "$git_root" ]; then
+          git_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null);
+          printf "\[\e[104m\e[97m\][%s\[\e[104m\e[97m\]>%s]\[\e[0m\]:%s" "$(basename "${git_root}")" "${git_branch}" "${PWD#$git_root}";
+       elif [[ "$PWD" == $HOME/* ]] || [[ "$PWD" == "$HOME" ]]; then
+           printf "~%s" "${PWD#$HOME}";
+       else
+           printf "$PWD";
+       fi;
+       printf "\$ ")';
