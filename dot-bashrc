@@ -20,7 +20,7 @@ export PS1='$(u=$(whoami);
        pwd_s="${PWD}/";
        if [ "$git_root" != "/" ]; then
           git_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null);
-          printf "\[${COL_GIT_PROJ}\][%s>\[${COL_GIT_BRANCH}\]%s\[${COL_NONE}\]\[${COL_GIT_PROJ}\]]\[${COL_NONE}\]://%s" "$(basename "${git_root}")" "${git_branch}" "$(basename ${pwd_s#$git_root} 2>/dev/null)";
+          printf "\[${COL_GIT_PROJ}\][%s>\[${COL_GIT_BRANCH}\]%s\[${COL_NONE}\]\[${COL_GIT_PROJ}\]]\[${COL_NONE}\]://%s" "$(basename "${git_root}")" "${git_branch}" "${pwd_s#$git_root}";
        elif [[ "$PWD" == $HOME/* ]] || [[ "$PWD" == "$HOME" ]]; then
            printf "~%s" "${PWD#$HOME}";
        else
