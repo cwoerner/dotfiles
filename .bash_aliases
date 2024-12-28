@@ -14,11 +14,11 @@ function bazel-path {
 }
 
 function bazel-show-targets {
-    # bazel query "attr(visibility, "//visibility:private", //wayve/services/data/preprocessing/data_copier/gen2:*)"
+    # bazel query "attr(visibility, "//visibility:private", //path/to/thing:*)"
     bazel query "attr(visibility, "//visibility:private", ${1}:*)"
 }
 
 function bazel-show-deps {
-    # bazel query "visible(//wayve/services/data/preprocessing/data_copier/gen2:py_checks, ...)"
+    # bazel query "visible(//path/to/thing:py_test, ...)"
     bazel query "visible($1, ...)"
 }
