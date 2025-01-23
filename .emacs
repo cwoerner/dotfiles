@@ -3,14 +3,9 @@
 ;;; Code:
 
 (setq-default show-trailing-whitespace t)
-
 (setq-default indent-tabs-mode nil)
-(setq create-lockfiles nil)
-;;(setq auto-save-file-name-transforms
-;;  `((".*" "~/.emacs-saves/" t)))
 
-;; (setq backup-directory-alist
-;;      '(("." . "~/.emacs-saves")))
+(setq create-lockfiles nil)
 
 (require 'package)
 
@@ -35,6 +30,13 @@
       use-package-always-ensure t
       backup-directory-alist `((".*" . ,temporary-file-directory))
       auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+
+(use-package material-theme)
+(use-package better-defaults)
+
+(use-package elpy
+  :init
+  (elpy-enable))
 
 ;; Enable scala-mode for highlighting, indentation and motion commands
 (use-package scala-mode
@@ -61,6 +63,7 @@
   ;; Optional - enable lsp-mode automatically in scala files
   ;; You could also swap out lsp for lsp-deffered in order to defer loading
   :hook  (scala-mode . lsp)
+         (python-mode . lsp)
          (lsp-mode . lsp-lens-mode)
   :config
   ;; Uncomment following section if you would like to tune lsp-mode performance according to
@@ -69,14 +72,28 @@
   ;; (setq read-process-output-max (* 1024 1024)) ;; 1mb
   ;; (setq lsp-idle-delay 0.500)
   ;; (setq lsp-log-io nil)
-  ;; (setq lsp-completion-provider :capf)
+  (setq lsp-completion-provider :capf)
   (setq lsp-prefer-flymake nil)
   ;; Makes LSP shutdown the metals server when all buffers in the project are closed.
   ;; https://emacs-lsp.github.io/lsp-mode/page/settings/mode/#lsp-keep-workspace-alive
+
+
   (setq lsp-keep-workspace-alive nil))
+
+(with-eval-after-load 'lsp-mode
+  (add-to-list 'lsp-file-watch-ignored-directories "/workspace/WayveCode/wayve/bzl-build\\'"))
 
 ;; Add metals backend for lsp-mode
 (use-package lsp-metals)
+
+;; Add pyright backend for lsp-mode
+(use-package lsp-pyright
+  :custom (lsp-pyright-langserver-command "pyright") ;; or basedpyright
+  :after lsp-mode
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-pyright)
+                          (lsp))))  ; or lsp-deferred
+
 
 ;; Enable nice rendering of documentation on hover
 ;;   Warning: on some systems this package can reduce your emacs responsiveness significally.
@@ -114,14 +131,19 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(bazel dap-mode posframe company yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode use-package)))
+   '(magit bazel company yasnippet lsp-ui lsp-metals flycheck sbt-mode))
+ '(resize-mini-frames t)
+ '(resize-mini-windows t))
+
+(use-package bazel)
+;;(load-theme 'material-light t)
+(load-theme 'material t)
+
+(provide 'emacs)
+;; .emacs ends here
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
-(use-package bazel)
-
-
