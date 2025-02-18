@@ -42,6 +42,9 @@ alias bm=bazel-mypy
 alias bd=bazel-pytest-debug
 
 # nvm
+if [[ ! -d $HOME/.nvm || ! -f $HOME/.nvm/nvm.sh ]]; then
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
@@ -91,10 +94,16 @@ cdnvm() {
 alias cd='cdnvm'
 cdnvm "$PWD" || exit
 
+if [[ ! -d $HOME/.pyenv ]]; then
+    curl -fsSL https://pyenv.run | bash
+fi    
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
+if [[ ! -d $HOME/.sdkman ]]; then
+    curl -s "https://get.sdkman.io" | bash
+fi
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
